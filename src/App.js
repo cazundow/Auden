@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import RepoTable from './RepoTable'
+import RepoTable from './RepoTable'; 
+import SearchResults from './SearchResults'; 
+import DetailsModal from './DetailsModal';
 
 const App = () => {
 
@@ -9,6 +11,9 @@ const App = () => {
   const [query, setQuery] = useState('tetris'); 
   const [recents, setRecents] = useState([]); 
   const [rated, setRated] = useState([]); 
+  const [show, setShow] = useState(false);
+  const [modalData, setModalData] = useState({}); 
+
 
   useEffect(() => {
     const getreposLists = async () => {
@@ -33,11 +38,20 @@ const App = () => {
   //the idea hear is to take the user input and try find a list of repos 
   const sendSearch = async () => {
     var label = document.getElementById("search-results-label");  
-    const response = await fetch(`https://api.github.com/search/repositories?q=${query}+&sort=stars&order=desc`); 
-    const data = await response.json(); 
-    if(data.items && data.items.length > 0){
+    const response = await fetch(`https://api.github.com/search/repositories?q=${query}+&sort=stars&order=asc`); 
+    const data = await response.json();
+
+    if(data.items.length >  0){
       setRepo(data.items);
+      console.log(data.items)
+    }else {
+      const response2 =  await fetch(`https://api.github.com/users/${query}/repos`);
+      const data2 =  await response2.json(); 
+      console.log(data2);
+      setRepo(data2)
     }
+      
+    
      
   }
 
@@ -61,7 +75,18 @@ const App = () => {
       resultsBox.classList.toggle("flash");
     }, 2000);
   };
-  
+  const handleClose = (e) => {
+    setShow(false);
+  }
+  const handleShow = (e) => {
+    setShow(true)
+  };
+const setModal = (e) => {
+  console.log(e.target.className);
+  //setModalData(repo.find(x => x.id == e.target.id));
+
+ // setShow(true);
+};
   return (
     <div className='App'>
       <form className='search-form'>
@@ -70,21 +95,38 @@ const App = () => {
       </form>
       <div className="container-fluid">
         <div className="row">
-        <div className="col-sm-12 col-md-4" id="search-results">
+        <div className="col-sm-12" id="search-results">
             <h2 id="search-results-label">Search results</h2>
-            <RepoTable items = {repo} />
+            <table className="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Repo Name</th>
+                <th scope="col">Forks</th>
+                <th scope="col">Issues</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <SearchResults items={repo.slice(0, 10)} setShow={setShow} setModalData={setModalData} />
+            </tbody>
+        </table>
           </div>
-          <div className="col-sm-12 col-md-4">
+          <div className="col-sm-12 col-md-6">
             <h2>Top Rated</h2>
-            <RepoTable items = {rated} />
+            <RepoTable items = {rated.slice(0, 10)} />
           </div>
-          <div className="col-sm-12 col-md-4">
+          <div className="col-sm-12 col-md-6">
             <h2>Most Recent</h2>
-            <RepoTable items = {recents} />
+            <RepoTable items = {recents.slice(0, 10)} />
           </div>
        </div>
       </div>
         
+    <div>
+      <DetailsModal modalData={modalData} show={show} handleClose={handleClose}/>
+    </div>
+      
     </div>
   )
 }
