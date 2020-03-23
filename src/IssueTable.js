@@ -13,7 +13,7 @@ const IssueTable = ({issues}) => {
             <tr>
                 <th scope="col">Issue #</th>
                 <th scope="col">Repo Name</th>
-                <th scope="col">open</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -24,7 +24,7 @@ const IssueTable = ({issues}) => {
                 <td> 
                 <p key={i}>{item.title}</p>
                 </td>
-                <td> <a href={item.html_url}>View</a></td>
+                <td> <a target='_blank' href={item.html_url}>View</a></td>
             </tr>
             )
             }

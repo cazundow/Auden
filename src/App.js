@@ -7,8 +7,8 @@ import DetailsModal from './DetailsModal';
 const App = () => {
 
   const [repo, setRepo] = useState([]); 
-  const [search, setSearch] = useState('tetris');
-  const [query, setQuery] = useState('tetris'); 
+  const [search, setSearch] = useState('auden');
+  const [query, setQuery] = useState('auden'); 
   const [recents, setRecents] = useState([]); 
   const [rated, setRated] = useState([]); 
   const [show, setShow] = useState(false);
@@ -90,13 +90,14 @@ const setModal = (e) => {
   return (
     <div className='App'>
       <form className='search-form'>
+      <h2 id="search-results-label">Search for repositories by name or user</h2>
         <input className='search-bar' value= {search} onChange={updateSearch} type='text'/>
         <button className='search-button' onClick={getSearch} type='submit'><span> </span>Search</button>
       </form>
       <div className="container-fluid">
         <div className="row">
         <div className="col-sm-12" id="search-results">
-            <h2 id="search-results-label">Search results</h2>
+          <h2>Search results</h2>
             <table className="table">
             <thead>
             <tr>

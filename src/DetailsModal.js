@@ -12,8 +12,6 @@ const DetailsModal = ({modalData, show, handleClose}) => {
     }, [modalData])
     //get the issues
     const getIssues = (async () => {
-
-        console.log(url);
         const response = await fetch(`${modalData.url}/issues`); 
         const data = await response.json();
         setIssues(data);
@@ -24,7 +22,9 @@ const DetailsModal = ({modalData, show, handleClose}) => {
         <Modal.Title>{modalData.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+            <h3>Description</h3>
             {modalData.description}
+            <h3>Issues</h3>
             {
                 <IssueTable issues = {issues}/>
             }
